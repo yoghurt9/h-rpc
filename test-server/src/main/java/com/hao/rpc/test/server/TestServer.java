@@ -1,14 +1,19 @@
 package com.hao.rpc.test.server;
 
 import com.hao.rpc.producer.MethodExecutor;
+import com.hao.rpc.registry.impl.DefaultServiceManager;
 
 public class TestServer {
 
     public static void main(String[] args) {
 
-        MethodExecutor methodExecutor = new MethodExecutor();
+        DefaultServiceManager serviceManager = new DefaultServiceManager();
+        serviceManager.registerService(new HelloServiceImpl());
+        serviceManager.registerService(new UserServiceImpl());
 
-        methodExecutor.register(new DefaultService(), 9000);
+        MethodExecutor methodExecutor = new MethodExecutor(serviceManager);
+
+        methodExecutor.exec(9000);
 
     }
 }
