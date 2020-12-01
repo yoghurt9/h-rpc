@@ -1,7 +1,8 @@
 package com.hao.rpc.test.server;
 
-import com.hao.rpc.producer.MethodExecutor;
-import com.hao.rpc.registry.impl.DefaultServiceManager;
+import com.hao.rpc.producer.registry.impl.DefaultServiceManager;
+import com.hao.rpc.producer.transport.RpcServer;
+import com.hao.rpc.producer.transport.impl.bio.BioRpcServer;
 
 public class TestServer {
 
@@ -11,9 +12,8 @@ public class TestServer {
         serviceManager.registerService(new HelloServiceImpl());
         serviceManager.registerService(new UserServiceImpl());
 
-        MethodExecutor methodExecutor = new MethodExecutor(serviceManager);
-
-        methodExecutor.exec(9000);
+        RpcServer rpcServer = new BioRpcServer(serviceManager);
+        rpcServer.exec(9000);
 
     }
 }

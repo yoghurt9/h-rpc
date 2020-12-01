@@ -1,6 +1,7 @@
-package com.hao.rpc.producer;
+package com.hao.rpc.producer.transport.impl.bio;
 
-import com.hao.rpc.registry.ServiceManager;
+import com.hao.rpc.producer.registry.ServiceManager;
+import com.hao.rpc.producer.transport.RpcServer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -11,30 +12,13 @@ import java.util.concurrent.*;
 /**
  * 将服务注册到这个对象里面，当接收到请求的时候，这个对象会自动执行
  */
-
-/**
- *     private static final int CORE_POOL_SIZE = 5;
- *     private static final int MAXIMUM_POOL_SIZE = 50;
- *     private static final int KEEP_ALIVE_TIME = 60;
- *     private static final int BLOCKING_QUEUE_CAPACITY = 100;
- *     private final ExecutorService threadPool;
- *     private RequestHandler requestHandler = new RequestHandler();
- *     private final ServiceRegistry serviceRegistry;
- *
- *     public RpcServer(ServiceRegistry serviceRegistry) {
- *         this.serviceRegistry = serviceRegistry;
- *         BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<>(BLOCKING_QUEUE_CAPACITY);
- *         ThreadFactory threadFactory = Executors.defaultThreadFactory();
- *         threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS, workingQueue, threadFactory);
- *     }
- */
 @Slf4j
-public class MethodExecutor {
+public class BioRpcServer implements RpcServer {
 
     private ExecutorService threadPool;
     private ServiceManager serviceManager;
 
-    public MethodExecutor(ServiceManager serviceManager) {
+    public BioRpcServer(ServiceManager serviceManager) {
         int CORE_POOL_SIZE = 5;
         int MAXIMUM_POOL_SIZE = 50;
         int KEEP_ALIVE_TIME = 60;
@@ -48,6 +32,7 @@ public class MethodExecutor {
         this.serviceManager = serviceManager;
     }
 
+    @Override
     public void exec(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             log.info("服务器启动……");
@@ -63,3 +48,4 @@ public class MethodExecutor {
     }
 
 }
+

@@ -1,8 +1,8 @@
-package com.hao.rpc.registry.impl;
+package com.hao.rpc.producer.registry.impl;
 
 import com.hao.rpc.exception.RpcError;
 import com.hao.rpc.exception.RpcException;
-import com.hao.rpc.registry.ServiceManager;
+import com.hao.rpc.producer.registry.ServiceManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

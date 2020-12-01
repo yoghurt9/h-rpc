@@ -1,4 +1,4 @@
-package com.hao.rpc.registry;
+package com.hao.rpc.producer.registry;
 
 public interface ServiceManager {
 

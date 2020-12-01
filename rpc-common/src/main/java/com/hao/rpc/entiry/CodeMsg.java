@@ -1,5 +1,8 @@
 package com.hao.rpc.entiry;
 
+import lombok.Getter;
+
+@Getter
 public enum CodeMsg {
     SUCCESS(200, "success"),
 

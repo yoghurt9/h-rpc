@@ -3,17 +3,16 @@ package com.hao.rpc.test;
 import com.hao.rpc.api.HelloObject;
 import com.hao.rpc.api.HelloService;
 import com.hao.rpc.api.UserService;
-import com.hao.rpc.consumer.ProxyFactory;
+import com.hao.rpc.consumer.proxy.ProxyFactory;
+import com.hao.rpc.consumer.transport.impl.bio.BioRpcClient;
 
 public class TestClient {
     public static void main(String[] args) {
-        HelloService helloService = ProxyFactory.getProxy(
-                HelloService.class, "localhost", 9000
-        );
+        BioRpcClient bioRpcClient = new BioRpcClient("127.0.0.1", 9000);
+        ProxyFactory proxyFactory = new ProxyFactory(bioRpcClient);
 
-        UserService userService = ProxyFactory.getProxy(
-                UserService.class, "localhost", 9000
-        );
+        HelloService helloService = proxyFactory.getProxy(HelloService.class);
+        UserService userService = proxyFactory.getProxy(UserService.class);
 
         String result1 = userService.login("张三");
         System.out.println(result1);
@@ -21,6 +20,5 @@ public class TestClient {
 
         HelloObject result2 = helloService.hello("张三", 22);
         System.out.println(result2);
-
     }
 }
