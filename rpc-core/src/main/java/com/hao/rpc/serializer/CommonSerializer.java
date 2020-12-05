@@ -1,6 +1,7 @@
 package com.hao.rpc.serializer;
 
 import com.hao.rpc.serializer.impl.JsonSerializer;
+import com.hao.rpc.serializer.impl.KryoSerializer;
 
 /**
  * 通用的序列化反序列化接口, 用来给编解码器使用
@@ -15,6 +16,8 @@ public interface CommonSerializer {
 
     static CommonSerializer getByCode(int code) {
         switch (code) {
+            case 0:
+                return new KryoSerializer();
             case 1:
                 return new JsonSerializer();
             default:

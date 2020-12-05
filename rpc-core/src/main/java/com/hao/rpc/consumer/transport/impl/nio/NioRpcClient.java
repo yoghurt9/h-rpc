@@ -5,7 +5,7 @@ import com.hao.rpc.codec.CommonEncoder;
 import com.hao.rpc.consumer.transport.RpcClient;
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
-import com.hao.rpc.serializer.impl.JsonSerializer;
+import com.hao.rpc.serializer.impl.KryoSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -40,7 +40,7 @@ public class NioRpcClient implements RpcClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new JsonSerializer()))
+                                .addLast(new CommonEncoder(new KryoSerializer()))
                                 .addLast(new NioClientHandler());
                     }
                 });

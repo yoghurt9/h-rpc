@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 public enum SerializerType {
 
+    KRYO(0),
     JSON(1);
 
     private final int code;
