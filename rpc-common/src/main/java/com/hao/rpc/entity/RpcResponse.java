@@ -1,6 +1,7 @@
-package com.hao.rpc.entiry;
+package com.hao.rpc.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * 响应体
  */
 @Data
+@NoArgsConstructor
 public class RpcResponse<T> implements Serializable {
 
     private Integer code;

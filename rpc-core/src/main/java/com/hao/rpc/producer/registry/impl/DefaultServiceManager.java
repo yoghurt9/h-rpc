@@ -1,6 +1,6 @@
 package com.hao.rpc.producer.registry.impl;
 
-import com.hao.rpc.exception.RpcError;
+import com.hao.rpc.enumeration.RpcError;
 import com.hao.rpc.exception.RpcException;
 import com.hao.rpc.producer.registry.ServiceManager;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class DefaultServiceManager implements ServiceManager {
 
-    private Map<String, Object> serviceMap = new ConcurrentHashMap<>();
-    private Set<String> registeredService = ConcurrentHashMap.newKeySet();
+    // 把这两个map都设置为静态的，那么每一个实例都会共享这两个collection
+    private static Map<String, Object> serviceMap = new ConcurrentHashMap<>();
+    private static Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
     @Override
     public <T> void registerService(T service) {

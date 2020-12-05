@@ -1,4 +1,4 @@
-package com.hao.rpc.entiry;
+package com.hao.rpc.entity;
 
 import lombok.Getter;
 

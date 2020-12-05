@@ -6,10 +6,10 @@ import java.lang.reflect.Proxy;
 
 public class ProxyFactory {
 
-    private RpcClient rpcClient;
+    private RpcClient client;
 
-    public ProxyFactory(RpcClient rpcClient) {
-        this.rpcClient = rpcClient;
+    public ProxyFactory(RpcClient client) {
+        this.client = client;
     }
 
     // 可以设置一个缓存
@@ -18,7 +18,7 @@ public class ProxyFactory {
         return (T) Proxy.newProxyInstance(
                 clazz.getClassLoader(),
                 new Class<?>[]{clazz},
-                new RequestHandler(rpcClient)
+                new RequestHandler(client)
         );
     }
 

@@ -6,7 +6,7 @@ import com.hao.rpc.api.UserService;
 import com.hao.rpc.consumer.proxy.ProxyFactory;
 import com.hao.rpc.consumer.transport.impl.bio.BioRpcClient;
 
-public class TestClient {
+public class TestBioClient {
     public static void main(String[] args) {
         BioRpcClient bioRpcClient = new BioRpcClient("127.0.0.1", 9000);
         ProxyFactory proxyFactory = new ProxyFactory(bioRpcClient);

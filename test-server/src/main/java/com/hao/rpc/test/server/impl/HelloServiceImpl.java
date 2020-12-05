@@ -1,4 +1,4 @@
-package com.hao.rpc.test.server;
+package com.hao.rpc.test.server.impl;
 
 import com.hao.rpc.api.HelloObject;
 import com.hao.rpc.api.HelloService;

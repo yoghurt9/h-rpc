@@ -1,6 +1,5 @@
 package com.hao.rpc.producer.transport.impl.bio;
 
-import com.hao.rpc.producer.registry.ServiceManager;
 import com.hao.rpc.producer.transport.RpcServer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,9 +15,8 @@ import java.util.concurrent.*;
 public class BioRpcServer implements RpcServer {
 
     private ExecutorService threadPool;
-    private ServiceManager serviceManager;
 
-    public BioRpcServer(ServiceManager serviceManager) {
+    public BioRpcServer() {
         int CORE_POOL_SIZE = 5;
         int MAXIMUM_POOL_SIZE = 50;
         int KEEP_ALIVE_TIME = 60;
@@ -29,7 +27,6 @@ public class BioRpcServer implements RpcServer {
                 TimeUnit.SECONDS, new ArrayBlockingQueue<>(BLOCKING_QUEUE_CAPACITY),
                 Executors.defaultThreadFactory()
         );
-        this.serviceManager = serviceManager;
     }
 
     @Override
@@ -39,7 +36,7 @@ public class BioRpcServer implements RpcServer {
             Socket socket;
             while((socket = serverSocket.accept()) != null) {
                 log.info("消费者连接: {}:{}", socket.getInetAddress(), socket.getPort());
-                threadPool.execute(new MethodTask(socket, serviceManager));
+                threadPool.execute(new MethodTask(socket));
             }
             threadPool.shutdown();
         } catch (IOException e) {

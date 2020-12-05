@@ -1,8 +1,9 @@
 package com.hao.rpc.producer.transport.impl.bio;
 
-import com.hao.rpc.entiry.RpcRequest;
-import com.hao.rpc.entiry.RpcResponse;
+import com.hao.rpc.entity.RpcRequest;
+import com.hao.rpc.entity.RpcResponse;
 import com.hao.rpc.producer.registry.ServiceManager;
+import com.hao.rpc.producer.registry.impl.DefaultServiceManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -18,9 +19,9 @@ public class MethodTask implements Runnable {
     private Socket socket;
     private ServiceManager serviceManager;
 
-    public MethodTask(Socket socket, ServiceManager serviceManager) {
+    public MethodTask(Socket socket) {
         this.socket = socket;
-        this.serviceManager = serviceManager;
+        this.serviceManager = new DefaultServiceManager();
     }
 
     @Override

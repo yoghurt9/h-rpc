@@ -1,4 +1,4 @@
-package com.hao.rpc.exception;
+package com.hao.rpc.enumeration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,10 @@ public enum RpcError {
 
     SERVICE_INVOCATION_FAIL("service invocation fail"),
     SERVICE_NOT_FOUND("service not found"),
-    SERVICE_NOT_IMPLEMENT_ANY_INTERFACE("the service does not implement any interfaces");
+    SERVICE_NOT_IMPLEMENT_ANY_INTERFACE("the service does not implement any interfaces"),
+    UNKNOWN_PROTOCOL("unknown protocol"),
+    UNKNOWN_SERIALIZER("unknown serializer"),
+    UNKNOWN_PACKAGE_TYPE("unknown package type");
 
     private final String message;
 

@@ -1,8 +1,8 @@
 package com.hao.rpc.consumer.transport.impl.bio;
 
 import com.hao.rpc.consumer.transport.RpcClient;
-import com.hao.rpc.entiry.RpcRequest;
-import com.hao.rpc.entiry.RpcResponse;
+import com.hao.rpc.entity.RpcRequest;
+import com.hao.rpc.entity.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
