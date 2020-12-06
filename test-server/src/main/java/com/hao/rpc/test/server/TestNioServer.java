@@ -3,6 +3,7 @@ package com.hao.rpc.test.server;
 import com.hao.rpc.producer.registry.impl.DefaultServiceManager;
 import com.hao.rpc.producer.transport.RpcServer;
 import com.hao.rpc.producer.transport.impl.nio.NioRpcServer;
+import com.hao.rpc.serializer.impl.KryoSerializer;
 import com.hao.rpc.test.server.impl.HelloServiceImpl;
 import com.hao.rpc.test.server.impl.UserServiceImpl;
 
@@ -17,7 +18,7 @@ public class TestNioServer {
         serviceManager.registerService(new HelloServiceImpl());
         serviceManager.registerService(new UserServiceImpl());
 
-        RpcServer server = new NioRpcServer();
+        RpcServer server = new NioRpcServer(new KryoSerializer());
         server.exec(9001);
     }
 

@@ -15,7 +15,8 @@ public enum RpcError {
     SERVICE_NOT_IMPLEMENT_ANY_INTERFACE("the service does not implement any interfaces"),
     UNKNOWN_PROTOCOL("unknown protocol"),
     UNKNOWN_SERIALIZER("unknown serializer"),
-    UNKNOWN_PACKAGE_TYPE("unknown package type");
+    UNKNOWN_PACKAGE_TYPE("unknown package type"),
+    SERIALIZER_NOT_FOUND("serializer not found");
 
     private final String message;
 

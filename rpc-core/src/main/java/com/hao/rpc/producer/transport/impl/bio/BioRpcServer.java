@@ -1,6 +1,7 @@
 package com.hao.rpc.producer.transport.impl.bio;
 
 import com.hao.rpc.producer.transport.RpcServer;
+import com.hao.rpc.serializer.CommonSerializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -42,6 +43,11 @@ public class BioRpcServer implements RpcServer {
         } catch (IOException e) {
             log.error("服务器启动时有错误发生:", e);
         }
+    }
+
+    @Override
+    public void setSerializer(CommonSerializer serializer) {
+
     }
 
 }

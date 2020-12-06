@@ -3,6 +3,7 @@ package com.hao.rpc.consumer.transport.impl.bio;
 import com.hao.rpc.consumer.transport.RpcClient;
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
+import com.hao.rpc.serializer.CommonSerializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -36,5 +37,10 @@ public class BioRpcClient implements RpcClient {
             log.error("调用时有错误发生：", e);
             return null;
         }
+    }
+
+    @Override
+    public void setSerializer(CommonSerializer serializer) {
+
     }
 }

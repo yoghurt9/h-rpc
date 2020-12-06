@@ -5,7 +5,7 @@ import com.hao.rpc.codec.CommonEncoder;
 import com.hao.rpc.consumer.transport.RpcClient;
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
-import com.hao.rpc.serializer.impl.KryoSerializer;
+import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -23,10 +23,12 @@ public class NioRpcClient implements RpcClient {
     private String host;
     private int port;
     private Bootstrap bootstrap;
+    private CommonSerializer serializer;
 
-    public NioRpcClient(String host, int port) {
+    public NioRpcClient(String host, int port, CommonSerializer serializer) {
         this.host = host;
         this.port = port;
+        this.serializer = serializer;
         init();
     }
 
@@ -40,7 +42,7 @@ public class NioRpcClient implements RpcClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new KryoSerializer()))
+                                .addLast(new CommonEncoder(serializer))
                                 .addLast(new NioClientHandler());
                     }
                 });
@@ -70,6 +72,11 @@ public class NioRpcClient implements RpcClient {
             log.error("发送消息时有错误发生: ", e);
         }
         return null;
+    }
+
+    @Override
+    public void setSerializer(CommonSerializer serializer) {
+
     }
 
 }

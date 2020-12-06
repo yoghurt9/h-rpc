@@ -5,6 +5,7 @@ import com.hao.rpc.api.HelloService;
 import com.hao.rpc.api.UserService;
 import com.hao.rpc.consumer.proxy.ProxyFactory;
 import com.hao.rpc.consumer.transport.impl.nio.NioRpcClient;
+import com.hao.rpc.serializer.impl.KryoSerializer;
 
 /**
  * 测试用Netty消费者
@@ -12,7 +13,7 @@ import com.hao.rpc.consumer.transport.impl.nio.NioRpcClient;
 public class TestNioClient {
 
     public static void main(String[] args) {
-        NioRpcClient nioRpcClient = new NioRpcClient("127.0.0.1", 9001);
+        NioRpcClient nioRpcClient = new NioRpcClient("127.0.0.1", 9001, new KryoSerializer());
         ProxyFactory proxyFactory = new ProxyFactory(nioRpcClient);
 
         HelloService helloService = proxyFactory.getProxy(HelloService.class);
