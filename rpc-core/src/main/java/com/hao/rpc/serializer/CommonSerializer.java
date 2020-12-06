@@ -1,5 +1,6 @@
 package com.hao.rpc.serializer;
 
+import com.hao.rpc.serializer.impl.HessianSerializer;
 import com.hao.rpc.serializer.impl.JsonSerializer;
 import com.hao.rpc.serializer.impl.KryoSerializer;
 
@@ -20,6 +21,8 @@ public interface CommonSerializer {
                 return new KryoSerializer();
             case 1:
                 return new JsonSerializer();
+            case 2:
+                return new HessianSerializer();
             default:
                 return null;
         }
