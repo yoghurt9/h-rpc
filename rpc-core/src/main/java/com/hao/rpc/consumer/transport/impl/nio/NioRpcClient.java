@@ -1,18 +1,15 @@
 package com.hao.rpc.consumer.transport.impl.nio;
 
-import com.hao.rpc.codec.CommonDecoder;
-import com.hao.rpc.codec.CommonEncoder;
 import com.hao.rpc.consumer.transport.RpcClient;
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
 import com.hao.rpc.serializer.CommonSerializer;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.InetSocketAddress;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * NIO方式消费侧客户端类
@@ -22,40 +19,23 @@ public class NioRpcClient implements RpcClient {
 
     private String host;
     private int port;
-    private Bootstrap bootstrap;
     private CommonSerializer serializer;
 
     public NioRpcClient(String host, int port, CommonSerializer serializer) {
         this.host = host;
         this.port = port;
         this.serializer = serializer;
-        init();
     }
 
-    private void init() {
-        bootstrap = new Bootstrap();
-        bootstrap.group(new NioEventLoopGroup())
-                .channel(NioSocketChannel.class)
-                .option(ChannelOption.SO_KEEPALIVE, true)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(serializer))
-                                .addLast(new NioClientHandler());
-                    }
-                });
-    }
+
 
     @Override
     public RpcResponse sendRequest(RpcRequest rpcRequest) {
+        AtomicReference<Object> result = new AtomicReference<>(null);
         try {
-
-            ChannelFuture future = bootstrap.connect(host, port).sync();
-            log.info("客户端连接到服务器 {}:{}", host, port);
-            Channel channel = future.channel();
-            if(channel != null) {
+            // get() : 获取一个连接上远程主机的channel，现在的实现方式是：每一次调用get()都会对服务器发起一个新的连接
+            Channel channel = ChannelProvider.get(new InetSocketAddress(host, port), serializer);
+            if(channel.isActive()) {
                 channel.writeAndFlush(rpcRequest).addListener(listener -> {
                     if(listener.isSuccess()) {
                         log.info("客户端发送消息成功: {}", rpcRequest.toString());
@@ -65,18 +45,18 @@ public class NioRpcClient implements RpcClient {
                 });
                 channel.closeFuture().sync();
                 AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse");
-                return channel.attr(key).get();
+                RpcResponse rpcResponse = channel.attr(key).get();
+                result.set(rpcResponse);
             }
-
         } catch (InterruptedException e) {
             log.error("发送消息时有错误发生: ", e);
         }
-        return null;
+        return (RpcResponse) result.get();
     }
 
     @Override
     public void setSerializer(CommonSerializer serializer) {
-
+        this.serializer = serializer;
     }
 
 }

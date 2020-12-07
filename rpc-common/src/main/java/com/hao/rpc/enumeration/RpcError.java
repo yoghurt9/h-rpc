@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public enum RpcError {
 
+    CLIENT_CONNECT_SERVER_FAILURE("客户端连接服务端失败"),
     SERVICE_INVOCATION_FAIL("service invocation fail"),
     SERVICE_NOT_FOUND("service not found"),
     SERVICE_NOT_IMPLEMENT_ANY_INTERFACE("the service does not implement any interfaces"),
