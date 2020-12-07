@@ -24,6 +24,7 @@
         <kryo-version>4.0.2</kryo-version>
         <guava-version>29.0-jre</guava-version>
         <hessian-version>4.0.63</hessian-version>
+        <protostuff-version>1.7.2</protostuff-version>
     </properties>
 
     <dependencies>

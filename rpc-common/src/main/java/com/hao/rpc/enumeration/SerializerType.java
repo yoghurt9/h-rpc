@@ -13,8 +13,9 @@ import lombok.Getter;
 public enum SerializerType {
 
     KRYO(0),
-    JSON(1),
-    HESSIAN(2);
+    PROTOBUF(1),
+    JSON(2),
+    HESSIAN(3);
 
     private final int code;
 
