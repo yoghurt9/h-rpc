@@ -1,18 +1,16 @@
 package com.hao.rpc.test.server;
 
-import com.hao.rpc.api.HelloService;
-import com.hao.rpc.api.UserService;
+import com.hao.rpc.annotation.ServiceScan;
 import com.hao.rpc.hook.ShutDownHook;
 import com.hao.rpc.producer.transport.RpcServer;
 import com.hao.rpc.producer.transport.impl.nio.NioRpcServer;
 import com.hao.rpc.registry.impl.NacosServiceRegistry;
 import com.hao.rpc.serializer.impl.KryoSerializer;
-import com.hao.rpc.test.server.impl.HelloServiceImpl;
-import com.hao.rpc.test.server.impl.UserServiceImpl;
 
 /**
  * 测试用Netty服务提供者
  */
+@ServiceScan
 public class TestNioServer {
 
     public static void main(String[] args) {
@@ -22,12 +20,9 @@ public class TestNioServer {
                 nacosServiceRegistry,
                 new KryoSerializer());
 
-        server.register(new HelloServiceImpl(), HelloService.class);
-        server.register(new UserServiceImpl(), UserService.class);
-
         new ShutDownHook(nacosServiceRegistry).addClearTask();
 
-        server.exec();
+        server.exec(TestNioServer.class);
     }
 
 }

@@ -36,7 +36,7 @@ public class NioServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
             // 3. 把结果通过网络传输给消费端
             ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result));
-            future.addListener(ChannelFutureListener.CLOSE);
+            future.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 
     }
 

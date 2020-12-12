@@ -8,7 +8,7 @@ public interface RpcServer {
      * 启动服务器，可以开始接收客户端连接
      *
      */
-    void exec();
+    void exec(Class<?> clazz);
 
     /**
      * 设置传输时的序列化器
@@ -21,8 +21,7 @@ public interface RpcServer {
      * 将服务保存在本地的注册表，同时注册到Nacos上
      *
      * @param service 服务的实现类
-     * @param serviceClass 服务接口的Class对象
-     * @param <T> 服务接口类型
+     * @param serviceName 服务接口的Class对象名
      */
-    <T> void register(T service, Class<T> serviceClass);
+    void register(Object service, String serviceName);
 }

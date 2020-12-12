@@ -10,6 +10,11 @@ import lombok.Getter;
 @Getter
 public enum RpcError {
 
+    UNKNOWN_ERROR("unknown error"),
+
+    // ======= 服务端自动扫描、注册 ========
+    SERVICE_SCAN_PACKAGE_NOT_FOUND("service scan package not found"),
+
     // ========== 服务注册与发现 ========
     CONNECT_TO_SERVICE_REGISTRY_FAIL("connect to service registry fail"),
     REGISTER_SERVICE_FAIL("register service fail"),

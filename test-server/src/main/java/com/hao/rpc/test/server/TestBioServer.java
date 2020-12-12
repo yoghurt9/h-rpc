@@ -17,7 +17,7 @@ public class TestBioServer {
         serviceManager.addService(new UserServiceImpl(), UserService.class.getCanonicalName());
 
         RpcServer server = new BioRpcServer(9999);
-        server.exec();
+        server.exec(TestBioServer.class);
 
     }
 }

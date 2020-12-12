@@ -34,7 +34,7 @@ public class BioRpcServer implements RpcServer {
     }
 
     @Override
-    public void exec() {
+    public void exec(Class<?> clazz) {
         try (ServerSocket serverSocket = new ServerSocket(this.port)) {
             log.info("服务器启动……");
             Socket socket;
@@ -54,7 +54,7 @@ public class BioRpcServer implements RpcServer {
     }
 
     @Override
-    public <T> void register(T service, Class<T> serviceClass) {
+    public void register(Object service, String serviceName) {
 
     }
 

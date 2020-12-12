@@ -13,6 +13,11 @@ public class ProxyFactory {
     }
 
     // 可以设置一个缓存
+
+    /**
+     * 通过jdk动态代理方式创建clazz类型的实现类
+     *
+     */
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Class<T> clazz) {
         return (T) Proxy.newProxyInstance(

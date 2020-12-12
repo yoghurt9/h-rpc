@@ -5,6 +5,7 @@ import com.hao.rpc.codec.CommonEncoder;
 import com.hao.rpc.producer.manager.ServiceManager;
 import com.hao.rpc.producer.manager.impl.DefaultServiceManager;
 import com.hao.rpc.producer.transport.RpcServer;
+import com.hao.rpc.producer.util.ScanService;
 import com.hao.rpc.registry.ServiceRegistry;
 import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.ServerBootstrap;
@@ -36,7 +37,11 @@ public class NioRpcServer implements RpcServer {
     }
 
     @Override
-    public void exec() {
+    public void exec(Class<?> clazz) {
+        // 1. 扫描并注册本地服务
+        new ScanService(this).scan(clazz.getCanonicalName());
+
+        // 2. 启动netty服务器
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -72,13 +77,12 @@ public class NioRpcServer implements RpcServer {
      * 将服务保存在本地的注册表，同时注册到Nacos上
      *
      * @param service 服务的实现类
-     * @param serviceClass 服务接口的Class对象
-     * @param <T> 服务接口类型
+     * @param serviceName 服务接口的Class对象名
      */
     @Override
-    public <T> void register(T service, Class<T> serviceClass) {
-        String serviceName = serviceClass.getCanonicalName();
+    public void register(Object service, String serviceName) {
         serviceManager.addService(service, serviceName);
         serviceRegistry.publish(serviceName);
     }
+
 }
