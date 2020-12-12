@@ -21,6 +21,7 @@ public class NioRpcClient implements RpcClient {
     private ServiceDiscovery serviceDiscovery;
     private CommonSerializer serializer;
 
+
     public NioRpcClient(ServiceDiscovery serviceDiscovery, CommonSerializer serializer) {
         this.serviceDiscovery = serviceDiscovery;
         this.serializer = serializer;
