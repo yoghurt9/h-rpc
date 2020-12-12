@@ -23,10 +23,22 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ChannelProvider {
 
-    private static Bootstrap bootstrap = initializeBootstrap();
+    private static Bootstrap bootstrap;
 
     private static final int MAX_RETRY_COUNT = 5;
     private static Channel channel;
+
+    static {
+        bootstrap = new Bootstrap();
+        bootstrap.group(new NioEventLoopGroup())
+                .channel(NioSocketChannel.class)
+                //连接的超时时间，超过这个时间还是建立不上的话则代表连接失败
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                //是否开启 TCP 底层心跳机制
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                //TCP默认开启了 Nagle 算法，该算法的作用是尽可能的发送大数据快，减少网络传输。TCP_NODELAY 参数的作用就是控制是否启用 Nagle 算法。
+                .option(ChannelOption.TCP_NODELAY, true);
+    }
 
     public static Channel get(InetSocketAddress inetSocketAddress, CommonSerializer serializer) {
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
@@ -64,7 +76,7 @@ public class ChannelProvider {
             if (retry == 0) {
                 log.error("客户端连接失败:重试次数已用完，放弃连接！");
                 semaphore.release();
-                throw new RpcException(RpcError.CLIENT_CONNECT_SERVER_FAILURE);
+                throw new RpcException(RpcError.CLIENT_CONNECT_SERVER_FAIL);
             }
             // 第几次重连
             int order = (MAX_RETRY_COUNT - retry) + 1;
@@ -74,20 +86,6 @@ public class ChannelProvider {
             bootstrap.config().group().schedule(() -> connect(bootstrap, inetSocketAddress, retry - 1, semaphore), delay, TimeUnit
                     .SECONDS);
         });
-    }
-
-    private static Bootstrap initializeBootstrap() {
-        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(eventLoopGroup)
-                .channel(NioSocketChannel.class)
-                //连接的超时时间，超过这个时间还是建立不上的话则代表连接失败
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-                //是否开启 TCP 底层心跳机制
-                .option(ChannelOption.SO_KEEPALIVE, true)
-                //TCP默认开启了 Nagle 算法，该算法的作用是尽可能的发送大数据快，减少网络传输。TCP_NODELAY 参数的作用就是控制是否启用 Nagle 算法。
-                .option(ChannelOption.TCP_NODELAY, true);
-        return bootstrap;
     }
 
 }

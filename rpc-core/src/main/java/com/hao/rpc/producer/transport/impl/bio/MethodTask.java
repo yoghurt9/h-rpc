@@ -2,8 +2,8 @@ package com.hao.rpc.producer.transport.impl.bio;
 
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
-import com.hao.rpc.producer.registry.ServiceManager;
-import com.hao.rpc.producer.registry.impl.DefaultServiceManager;
+import com.hao.rpc.producer.manager.ServiceManager;
+import com.hao.rpc.producer.manager.impl.DefaultServiceManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

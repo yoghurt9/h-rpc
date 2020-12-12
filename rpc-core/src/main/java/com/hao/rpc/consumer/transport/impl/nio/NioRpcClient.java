@@ -3,6 +3,7 @@ package com.hao.rpc.consumer.transport.impl.nio;
 import com.hao.rpc.consumer.transport.RpcClient;
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
+import com.hao.rpc.registry.ServiceDiscovery;
 import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
@@ -17,24 +18,21 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class NioRpcClient implements RpcClient {
 
-    private String host;
-    private int port;
+    private ServiceDiscovery serviceDiscovery;
     private CommonSerializer serializer;
 
-    public NioRpcClient(String host, int port, CommonSerializer serializer) {
-        this.host = host;
-        this.port = port;
+    public NioRpcClient(ServiceDiscovery serviceDiscovery, CommonSerializer serializer) {
+        this.serviceDiscovery = serviceDiscovery;
         this.serializer = serializer;
     }
-
-
 
     @Override
     public RpcResponse sendRequest(RpcRequest rpcRequest) {
         AtomicReference<Object> result = new AtomicReference<>(null);
         try {
             // get() : 获取一个连接上远程主机的channel，现在的实现方式是：每一次调用get()都会对服务器发起一个新的连接
-            Channel channel = ChannelProvider.get(new InetSocketAddress(host, port), serializer);
+            InetSocketAddress inetSocketAddress = serviceDiscovery.subscribe(rpcRequest.getInterfaceName());
+            Channel channel = ChannelProvider.get(inetSocketAddress, serializer);
             if(channel.isActive()) {
                 channel.writeAndFlush(rpcRequest).addListener(listener -> {
                     if(listener.isSuccess()) {

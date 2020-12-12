@@ -5,6 +5,7 @@ import com.hao.rpc.api.HelloService;
 import com.hao.rpc.api.UserService;
 import com.hao.rpc.consumer.proxy.ProxyFactory;
 import com.hao.rpc.consumer.transport.impl.nio.NioRpcClient;
+import com.hao.rpc.registry.impl.NacosServiceDiscovery;
 import com.hao.rpc.serializer.impl.ProtobufSerializer;
 
 /**
@@ -13,7 +14,7 @@ import com.hao.rpc.serializer.impl.ProtobufSerializer;
 public class TestNioClient {
 
     public static void main(String[] args) {
-        NioRpcClient nioRpcClient = new NioRpcClient("127.0.0.1", 9001, new ProtobufSerializer());
+        NioRpcClient nioRpcClient = new NioRpcClient(new NacosServiceDiscovery("127.0.0.1:8848"), new ProtobufSerializer());
         ProxyFactory proxyFactory = new ProxyFactory(nioRpcClient);
 
         HelloService helloService = proxyFactory.getProxy(HelloService.class);

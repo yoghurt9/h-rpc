@@ -3,8 +3,8 @@ package com.hao.rpc.producer.transport.impl.nio;
 
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
-import com.hao.rpc.producer.registry.ServiceManager;
-import com.hao.rpc.producer.registry.impl.DefaultServiceManager;
+import com.hao.rpc.producer.manager.ServiceManager;
+import com.hao.rpc.producer.manager.impl.DefaultServiceManager;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,11 +21,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class NioServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
-    private static ServiceManager serviceManager;
-
-    static {
-        serviceManager = new DefaultServiceManager();
-    }
+    private static ServiceManager serviceManager = new DefaultServiceManager();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest rpcRequest) throws Exception {

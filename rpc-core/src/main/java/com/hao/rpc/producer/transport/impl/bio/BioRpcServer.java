@@ -16,8 +16,11 @@ import java.util.concurrent.*;
 public class BioRpcServer implements RpcServer {
 
     private ExecutorService threadPool;
+    private int port;
 
-    public BioRpcServer() {
+    public BioRpcServer(int port) {
+        this.port = port;
+
         int CORE_POOL_SIZE = 5;
         int MAXIMUM_POOL_SIZE = 50;
         int KEEP_ALIVE_TIME = 60;
@@ -31,8 +34,8 @@ public class BioRpcServer implements RpcServer {
     }
 
     @Override
-    public void exec(int port) {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+    public void exec() {
+        try (ServerSocket serverSocket = new ServerSocket(this.port)) {
             log.info("服务器启动……");
             Socket socket;
             while((socket = serverSocket.accept()) != null) {
@@ -49,6 +52,12 @@ public class BioRpcServer implements RpcServer {
     public void setSerializer(CommonSerializer serializer) {
 
     }
+
+    @Override
+    public <T> void register(T service, Class<T> serviceClass) {
+
+    }
+
 
 }
 

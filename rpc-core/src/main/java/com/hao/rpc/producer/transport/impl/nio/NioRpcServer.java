@@ -2,7 +2,10 @@ package com.hao.rpc.producer.transport.impl.nio;
 
 import com.hao.rpc.codec.CommonDecoder;
 import com.hao.rpc.codec.CommonEncoder;
+import com.hao.rpc.producer.manager.ServiceManager;
+import com.hao.rpc.producer.manager.impl.DefaultServiceManager;
 import com.hao.rpc.producer.transport.RpcServer;
+import com.hao.rpc.registry.ServiceRegistry;
 import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -14,19 +17,26 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetSocketAddress;
+
 @Slf4j
 @Data
 public class NioRpcServer implements RpcServer {
 
     private CommonSerializer serializer;
+    private final InetSocketAddress localAddress;
+    private final ServiceManager serviceManager;
+    private final ServiceRegistry serviceRegistry;
 
-    public NioRpcServer(CommonSerializer serializer) {
+    public NioRpcServer(String host, int port, ServiceRegistry serviceRegistry, CommonSerializer serializer) {
+        localAddress = new InetSocketAddress(host, port);
+        this.serviceRegistry = serviceRegistry;
+        this.serviceManager = new DefaultServiceManager();
         this.serializer = serializer;
     }
 
     @Override
-    public void exec(int port) {
-
+    public void exec() {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -47,7 +57,7 @@ public class NioRpcServer implements RpcServer {
                             pipeline.addLast(new NioServerHandler());
                         }
                     });
-            ChannelFuture future = serverBootstrap.bind(port).sync();
+            ChannelFuture future = serverBootstrap.bind(localAddress).sync();
             future.channel().closeFuture().sync();
 
         } catch (InterruptedException e) {
@@ -56,5 +66,19 @@ public class NioRpcServer implements RpcServer {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    /**
+     * 将服务保存在本地的注册表，同时注册到Nacos上
+     *
+     * @param service 服务的实现类
+     * @param serviceClass 服务接口的Class对象
+     * @param <T> 服务接口类型
+     */
+    @Override
+    public <T> void register(T service, Class<T> serviceClass) {
+        String serviceName = serviceClass.getCanonicalName();
+        serviceManager.addService(service, serviceName);
+        serviceRegistry.publish(serviceName);
     }
 }
