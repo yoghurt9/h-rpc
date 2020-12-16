@@ -1,7 +1,7 @@
 package com.hao.rpc.serializer.impl;
 
-import com.hao.rpc.enumeration.SerializerType;
 import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.SerializerFactory;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
@@ -42,7 +42,7 @@ public class ProtobufSerializer implements CommonSerializer {
 
     @Override
     public int getCode() {
-        return SerializerType.valueOf("PROTOBUF").getCode();
+        return SerializerFactory.PROTOBUF;
     }
 
     private Schema getSchema(Class clazz) {

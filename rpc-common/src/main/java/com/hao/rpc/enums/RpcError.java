@@ -1,4 +1,4 @@
-package com.hao.rpc.enumeration;
+package com.hao.rpc.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

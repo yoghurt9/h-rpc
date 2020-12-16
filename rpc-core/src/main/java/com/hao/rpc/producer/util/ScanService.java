@@ -2,7 +2,7 @@ package com.hao.rpc.producer.util;
 
 import com.hao.rpc.annotation.RpcService;
 import com.hao.rpc.annotation.ServiceScan;
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
 import com.hao.rpc.producer.transport.RpcServer;
 import com.hao.rpc.util.ReflectUtil;

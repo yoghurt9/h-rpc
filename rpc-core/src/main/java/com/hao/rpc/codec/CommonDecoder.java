@@ -2,10 +2,11 @@ package com.hao.rpc.codec;
 
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
-import com.hao.rpc.enumeration.PackageType;
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.PackageType;
+import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
 import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.SerializerFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
@@ -44,7 +45,7 @@ public class CommonDecoder extends ReplayingDecoder {
 
         // 3. 序列化器的类型
         int serializerCode = in.readInt();
-        CommonSerializer serializer = CommonSerializer.getByCode(serializerCode);
+        CommonSerializer serializer = SerializerFactory.getSerializer(serializerCode);
         if(serializer == null) {
             log.error(RpcError.UNKNOWN_SERIALIZER + " : {}", serializerCode);
             throw new RpcException(RpcError.UNKNOWN_SERIALIZER);

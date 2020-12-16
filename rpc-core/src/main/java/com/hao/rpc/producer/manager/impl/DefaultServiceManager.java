@@ -1,6 +1,6 @@
 package com.hao.rpc.producer.manager.impl;
 
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
 import com.hao.rpc.producer.manager.ServiceManager;
 import lombok.extern.slf4j.Slf4j;

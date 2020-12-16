@@ -3,9 +3,9 @@ package com.hao.rpc.serializer.impl;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.hao.rpc.enumeration.SerializerType;
 import com.hao.rpc.exception.SerializeException;
 import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.SerializerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
@@ -73,6 +73,6 @@ public class KryoSerializer implements CommonSerializer {
 
     @Override
     public int getCode() {
-        return SerializerType.valueOf("KRYO").getCode();
+        return SerializerFactory.KRYO;
     }
 }

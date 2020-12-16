@@ -3,8 +3,8 @@ package com.hao.rpc.serializer.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hao.rpc.entity.RpcRequest;
-import com.hao.rpc.enumeration.SerializerType;
 import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.SerializerFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 public class JsonSerializer implements CommonSerializer {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
     @Override
@@ -71,7 +71,7 @@ public class JsonSerializer implements CommonSerializer {
 
     @Override
     public int getCode() {
-        return SerializerType.valueOf("JSON").getCode();
+        return SerializerFactory.JSON;
     }
 
 }

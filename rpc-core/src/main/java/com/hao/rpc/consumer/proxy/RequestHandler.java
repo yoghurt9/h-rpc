@@ -5,7 +5,7 @@ import com.hao.rpc.consumer.transport.RpcClient;
 import com.hao.rpc.entity.CodeMsg;
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,6 +1,6 @@
 package com.hao.rpc.exception;
 
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.RpcError;
 
 /**
  * RPC调用异常

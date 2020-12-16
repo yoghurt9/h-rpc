@@ -4,7 +4,7 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
 import com.hao.rpc.loadBalance.LoadBalancer;
 import com.hao.rpc.registry.ServiceDiscovery;

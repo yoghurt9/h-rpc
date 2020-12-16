@@ -2,7 +2,7 @@ package com.hao.rpc.consumer.transport.impl.nio;
 
 import com.hao.rpc.codec.CommonDecoder;
 import com.hao.rpc.codec.CommonEncoder;
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
 import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.Bootstrap;

@@ -2,9 +2,9 @@ package com.hao.rpc.serializer.impl;
 
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
-import com.hao.rpc.enumeration.SerializerType;
 import com.hao.rpc.exception.SerializeException;
 import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.SerializerFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
@@ -55,6 +55,6 @@ public class HessianSerializer implements CommonSerializer {
 
     @Override
     public int getCode() {
-        return SerializerType.valueOf("HESSIAN").getCode();
+        return SerializerFactory.HESSIAN;
     }
 }

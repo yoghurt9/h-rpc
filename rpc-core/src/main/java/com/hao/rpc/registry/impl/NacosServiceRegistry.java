@@ -3,7 +3,7 @@ package com.hao.rpc.registry.impl;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
-import com.hao.rpc.enumeration.RpcError;
+import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
 import com.hao.rpc.registry.ServiceRegistry;
 import lombok.extern.slf4j.Slf4j;

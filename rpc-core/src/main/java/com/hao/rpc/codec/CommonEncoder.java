@@ -1,7 +1,7 @@
 package com.hao.rpc.codec;
 
 import com.hao.rpc.entity.RpcRequest;
-import com.hao.rpc.enumeration.PackageType;
+import com.hao.rpc.enums.PackageType;
 import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
