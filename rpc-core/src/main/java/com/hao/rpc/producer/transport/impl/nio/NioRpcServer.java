@@ -32,7 +32,7 @@ public class NioRpcServer implements RpcServer {
     public NioRpcServer(String host, int port, ServiceRegistry serviceRegistry, CommonSerializer serializer) {
         localAddress = new InetSocketAddress(host, port);
         this.serviceRegistry = serviceRegistry;
-        this.serviceManager = new DefaultServiceManager();
+        this.serviceManager = DefaultServiceManager.INSTANCE;
         this.serializer = serializer;
     }
 
@@ -55,7 +55,7 @@ public class NioRpcServer implements RpcServer {
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
+                        protected void initChannel(SocketChannel ch) {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast(new CommonEncoder(serializer));
                             pipeline.addLast(new CommonDecoder());

@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class NioServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
-    private static ServiceManager serviceManager = new DefaultServiceManager();
+    private static final ServiceManager serviceManager = DefaultServiceManager.INSTANCE;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest rpcRequest) throws Exception {

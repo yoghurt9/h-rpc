@@ -12,7 +12,7 @@ public class TestBioServer {
 
     public static void main(String[] args) {
 
-        DefaultServiceManager serviceManager = new DefaultServiceManager();
+        DefaultServiceManager serviceManager = DefaultServiceManager.INSTANCE;
         serviceManager.addService(new HelloServiceImpl(), HelloService.class.getCanonicalName());
         serviceManager.addService(new UserServiceImpl(), UserService.class.getCanonicalName());
 

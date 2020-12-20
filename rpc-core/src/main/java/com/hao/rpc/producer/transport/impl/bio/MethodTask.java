@@ -16,12 +16,12 @@ import java.net.Socket;
 @Slf4j
 public class MethodTask implements Runnable {
 
-    private Socket socket;
-    private ServiceManager serviceManager;
+    private final Socket socket;
+    private final ServiceManager serviceManager;
 
     public MethodTask(Socket socket) {
         this.socket = socket;
-        this.serviceManager = new DefaultServiceManager();
+        this.serviceManager = DefaultServiceManager.INSTANCE;
     }
 
     @Override

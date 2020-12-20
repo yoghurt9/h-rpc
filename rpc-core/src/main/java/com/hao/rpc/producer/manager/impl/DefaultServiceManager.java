@@ -15,10 +15,18 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultServiceManager implements ServiceManager {
 
     /**
+     * 单例模式(饿汉式)
+     */
+    public static final DefaultServiceManager INSTANCE = new DefaultServiceManager();
+
+    private DefaultServiceManager() {}
+
+
+    /**
      * 把这个map设置为静态的，那么每一个实例都会共享这个map
      * key 是服务名(接口全限定名), value 是实现类实体
      */
-    private static Map<String, Object> serviceMap = new ConcurrentHashMap<>();
+    private final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
 
 
     /**
