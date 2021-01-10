@@ -39,7 +39,7 @@ public class NioRpcClient implements RpcClient {
                     if(listener.isSuccess()) {
                         log.info("客户端发送消息成功: {}", rpcRequest.toString());
                     } else {
-                        log.error("客户端发送消息失败: {}", listener.cause());
+                        log.error("客户端发送消息失败: {}", listener.cause().toString());
                     }
                 });
                 channel.closeFuture().sync();

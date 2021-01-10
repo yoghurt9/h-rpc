@@ -58,7 +58,8 @@ public class RequestHandler implements InvocationHandler {
             log.error(msg);
             throw new RpcException(RpcError.SERVICE_INVOCATION_FAIL, msg);
         }
-        if(rpcResponse.getCode() == null || !rpcResponse.getCode().equals(CodeMsg.SUCCESS.getCode())) {
+
+        if (!CodeMsg.SUCCESS.getCode().equals(rpcResponse.getCode())) {
             msg = MessageFormat.format("service invocation fail, rpcRequest: {0}, rpcResponse:{1}", rpcRequest.toString(), rpcRequest.toString());
             log.error(msg);
             throw new RpcException(RpcError.SERVICE_INVOCATION_FAIL, msg);
