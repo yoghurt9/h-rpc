@@ -2,7 +2,7 @@ package com.hao.rpc.registry;
 
 /**
  * 发布/订阅中心, 和服务注册中心中间件交互的接口
- * publish/subscribe
+ * publish/discovery
  */
 public interface ServiceRegistry {
 

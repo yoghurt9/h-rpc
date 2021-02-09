@@ -5,13 +5,21 @@ import com.hao.rpc.consumer.transport.RpcClient;
 import com.hao.rpc.entity.CodeMsg;
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
+import com.hao.rpc.enums.PackageType;
 import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
+import com.hao.rpc.protocol.MsgHeader;
+import com.hao.rpc.protocol.ProtocolConstants;
+import com.hao.rpc.protocol.RpcProtocol;
+import com.hao.rpc.protocol.RpcSessionHolder;
+import com.hao.rpc.serializer.SerializerFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -20,7 +28,7 @@ import java.text.MessageFormat;
 @Slf4j
 public class RequestHandler implements InvocationHandler {
 
-    private RpcClient client;
+    private final RpcClient client;
 
     public RequestHandler(RpcClient client) {
         this.client = client;
@@ -28,11 +36,21 @@ public class RequestHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
+
+        // 1. 封装消息头
+        long sessionId = RpcSessionHolder.getSessionId();
+        MsgHeader header = MsgHeader.builder()
+                .magic(ProtocolConstants.MAGIC_NUMBER)
+                .version(ProtocolConstants.VERSION)
+                .sessionId(sessionId)
+                .msgType(PackageType.REQUEST_PACK.getCode())
+                .serialization(SerializerFactory.PROTOBUF)
+                .build();
+
         // method.getDeclaringClass() 返回的是 “实现了该方法” 的类
         // 比如子类重写了父类或者接口的方法，返回的就是子类;
         // 反之，只是继承但没重写，返回的就是父类
-
-        // 1. 创建请求体
+        // 2. 创建消息体
         RpcRequest rpcRequest = RpcRequest.builder()
                 .interfaceName(method.getDeclaringClass().getName())
                 .methodName(method.getName())
@@ -40,13 +58,32 @@ public class RequestHandler implements InvocationHandler {
                 .parameters(args)
                 .build();
 
-        // 2. 通过rpcClient, 发送给生产者并获取response
-        RpcResponse rpcResponse = client.sendRequest(rpcRequest);
+        // 3. 封装协议
+        RpcProtocol<RpcRequest> protocol = new RpcProtocol<>();
+        protocol.setHeader(header);
+        protocol.setBody(rpcRequest);
 
-        // 3. 检验 rpcResponse
+        CompletableFuture<RpcResponse> future = new CompletableFuture<>();
+        RpcSessionHolder.addSession(sessionId, future);
+
+        // 2. 通过rpcClient, 发送给生产者
+        client.sendRequest(protocol);
+
+        // 3. 如果是异步，在发送完成后，就可以返回了
+        if (method.getReturnType().equals(CompletableFuture.class)) {
+            return future;
+        }
+
+        // 4. 同步获取 rpcResponse
+        RpcResponse rpcResponse = null;
+        try {
+            rpcResponse = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
         checkRpcResponse(rpcRequest, rpcResponse);
 
-        // 4. 返回data
+        // 5. 返回data
         return rpcResponse.getData();
     }
 

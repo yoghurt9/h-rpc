@@ -3,7 +3,7 @@ package com.hao.rpc.serializer.impl;
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
 import com.hao.rpc.exception.SerializeException;
-import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.RpcSerializer;
 import com.hao.rpc.serializer.SerializerFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
  * 基于Hessian协议的序列化器
  */
 @Slf4j
-public class HessianSerializer implements CommonSerializer {
+public class HessianSerializer implements RpcSerializer {
 
 
     @Override

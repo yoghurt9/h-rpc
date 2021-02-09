@@ -3,10 +3,11 @@ package com.hao.rpc.producer.transport.impl.nio;
 
 import com.hao.rpc.entity.RpcRequest;
 import com.hao.rpc.entity.RpcResponse;
+import com.hao.rpc.enums.PackageType;
 import com.hao.rpc.producer.manager.ServiceManager;
 import com.hao.rpc.producer.manager.impl.DefaultServiceManager;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
+import com.hao.rpc.protocol.MsgHeader;
+import com.hao.rpc.protocol.RpcProtocol;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -19,26 +20,50 @@ import java.lang.reflect.Method;
  * Netty中处理RpcRequest的Handler
  */
 @Slf4j
-public class NioServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
+public class NioServerHandler extends SimpleChannelInboundHandler<RpcProtocol<RpcRequest>> {
 
-    private static final ServiceManager serviceManager = DefaultServiceManager.INSTANCE;
+    private static final ServiceManager SERVICE_MANAGER = DefaultServiceManager.INSTANCE;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, RpcRequest rpcRequest) throws Exception {
-            log.info("服务器接收到请求: {}", rpcRequest);
+    protected void channelRead0(ChannelHandlerContext ctx, RpcProtocol<RpcRequest> msg) throws Exception {
+        RpcRequestProcessor.submitRequest(() -> {
+            RpcProtocol<RpcResponse> resProtocol = new RpcProtocol<>();
+            MsgHeader header = msg.getHeader();
+            header.setMsgType(PackageType.RESPONSE_PACK.getCode());
+            RpcResponse response;
+            try {
+//                Object result = handle(msg.getBody());
+                Object result = invokeTargetMethod(msg.getBody());
+                response = RpcResponse.success(result);
+            } catch (Throwable throwable) {
+                response = RpcResponse.fail();
+                log.error("process request {} error, {}", header.getSessionId(), throwable);
+            }
 
-            // 1. 获取请求体
-            String interfaceName = rpcRequest.getInterfaceName();
-            Object service = serviceManager.getService(interfaceName);
-
-            // 2. 反射调用方法
-            Object result = invokeTargetMethod(rpcRequest, service);
-
-            // 3. 把结果通过网络传输给消费端
-            ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result));
-            future.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            resProtocol.setHeader(header);
+            resProtocol.setBody(response);
+            ctx.writeAndFlush(resProtocol);
+        });
 
     }
+
+//    private Object handle(RpcRequest request) throws Throwable {
+//        String serviceKey = RpcServiceHelper.buildServiceKey(request.getClassName(), request.getServiceVersion());
+//        Object serviceBean = rpcServiceMap.get(serviceKey);
+//
+//        if (serviceBean == null) {
+//            throw new RuntimeException(String.format("service not exist: %s:%s", request.getClassName(), request.getMethodName()));
+//        }
+//
+//        Class<?> serviceClass = serviceBean.getClass();
+//        String methodName = request.getMethodName();
+//        Class<?>[] parameterTypes = request.getParameterTypes();
+//        Object[] parameters = request.getParams();
+//
+//        FastClass fastClass = FastClass.create(serviceClass);
+//        int methodIndex = fastClass.getIndex(methodName, parameterTypes);
+//        return fastClass.invoke(methodIndex, serviceBean, parameters);
+//    }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -48,8 +73,9 @@ public class NioServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
     }
 
 
-    private Object invokeTargetMethod(RpcRequest rpcRequest, Object service) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-
+    private Object invokeTargetMethod(RpcRequest rpcRequest) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        String interfaceName = rpcRequest.getInterfaceName();
+        Object service = SERVICE_MANAGER.getService(interfaceName);
         Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypes());
         return method.invoke(service, rpcRequest.getParameters());
 

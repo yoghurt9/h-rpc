@@ -1,6 +1,6 @@
 package com.hao.rpc.serializer.impl;
 
-import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.RpcSerializer;
 import com.hao.rpc.serializer.SerializerFactory;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 使用ProtoBuf的序列化器
  */
-public class ProtobufSerializer implements CommonSerializer {
+public class ProtobufSerializer implements RpcSerializer {
 
     private LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
     private Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();

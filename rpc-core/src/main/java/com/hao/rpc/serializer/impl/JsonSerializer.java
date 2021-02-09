@@ -3,7 +3,7 @@ package com.hao.rpc.serializer.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hao.rpc.entity.RpcRequest;
-import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.RpcSerializer;
 import com.hao.rpc.serializer.SerializerFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
  * 使用JSON格式的序列化器
  */
 @Slf4j
-public class JsonSerializer implements CommonSerializer {
+public class JsonSerializer implements RpcSerializer {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

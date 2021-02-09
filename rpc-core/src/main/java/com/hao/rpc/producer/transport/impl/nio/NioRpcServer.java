@@ -7,7 +7,6 @@ import com.hao.rpc.producer.manager.impl.DefaultServiceManager;
 import com.hao.rpc.producer.transport.RpcServer;
 import com.hao.rpc.producer.util.ScanService;
 import com.hao.rpc.registry.ServiceRegistry;
-import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -24,16 +23,14 @@ import java.net.InetSocketAddress;
 @Data
 public class NioRpcServer implements RpcServer {
 
-    private CommonSerializer serializer;
     private final InetSocketAddress localAddress;
     private final ServiceManager serviceManager;
     private final ServiceRegistry serviceRegistry;
 
-    public NioRpcServer(String host, int port, ServiceRegistry serviceRegistry, CommonSerializer serializer) {
+    public NioRpcServer(String host, int port, ServiceRegistry serviceRegistry) {
         localAddress = new InetSocketAddress(host, port);
         this.serviceRegistry = serviceRegistry;
         this.serviceManager = DefaultServiceManager.INSTANCE;
-        this.serializer = serializer;
     }
 
     @Override
@@ -45,7 +42,6 @@ public class NioRpcServer implements RpcServer {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
@@ -57,7 +53,7 @@ public class NioRpcServer implements RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new CommonEncoder(serializer));
+                            pipeline.addLast(new CommonEncoder());
                             pipeline.addLast(new CommonDecoder());
                             pipeline.addLast(new NioServerHandler());
                         }

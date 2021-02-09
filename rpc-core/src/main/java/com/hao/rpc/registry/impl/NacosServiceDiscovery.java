@@ -32,7 +32,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
 
 
     @Override
-    public InetSocketAddress subscribe(String serviceName) {
+    public InetSocketAddress discovery(String serviceName) {
         try {
             List<Instance> instances = namingService.getAllInstances(serviceName);
             if(instances.size() == 0) {

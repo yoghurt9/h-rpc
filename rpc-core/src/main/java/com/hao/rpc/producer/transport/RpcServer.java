@@ -1,7 +1,5 @@
 package com.hao.rpc.producer.transport;
 
-import com.hao.rpc.serializer.CommonSerializer;
-
 public interface RpcServer {
 
     /**
@@ -9,12 +7,6 @@ public interface RpcServer {
      *
      */
     void exec(Class<?> clazz);
-
-    /**
-     * 设置传输时的序列化器
-     * @param serializer 序列化器的实现类
-     */
-    void setSerializer(CommonSerializer serializer);
 
 
     /**

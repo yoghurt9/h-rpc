@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.hao.rpc.exception.SerializeException;
-import com.hao.rpc.serializer.CommonSerializer;
+import com.hao.rpc.serializer.RpcSerializer;
 import com.hao.rpc.serializer.SerializerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.objenesis.strategy.StdInstantiatorStrategy;
@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
  * Kryo序列化器
  */
 @Slf4j
-public class KryoSerializer implements CommonSerializer {
+public class KryoSerializer implements RpcSerializer {
 
 
     // 每个线程的 Kryo 实例

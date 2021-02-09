@@ -3,7 +3,7 @@ package com.hao.rpc.serializer;
 /**
  * 通用的序列化反序列化接口, 用来给编解码器使用
  */
-public interface CommonSerializer {
+public interface RpcSerializer {
 
     byte[] serialize(Object obj);
 

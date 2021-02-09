@@ -13,6 +13,6 @@ public interface ServiceDiscovery {
      * @param serviceName 服务名称
      * @return 服务实体
      */
-    InetSocketAddress subscribe(String serviceName);
+    InetSocketAddress discovery(String serviceName);
 
 }

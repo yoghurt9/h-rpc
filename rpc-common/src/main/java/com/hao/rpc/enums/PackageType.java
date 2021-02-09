@@ -7,9 +7,15 @@ import lombok.Getter;
 @Getter
 public enum PackageType {
 
-    REQUEST_PACK(0),
-    RESPONSE_PACK(1);
+    /**
+     * 请求体
+     */
+    REQUEST_PACK((byte) 0),
 
-    private final int code;
+    /**
+     * 响应体
+     */
+    RESPONSE_PACK((byte) 1);
 
+    private final byte code;
 }

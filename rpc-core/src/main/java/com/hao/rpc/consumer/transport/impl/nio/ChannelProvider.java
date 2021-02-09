@@ -4,7 +4,6 @@ import com.hao.rpc.codec.CommonDecoder;
 import com.hao.rpc.codec.CommonEncoder;
 import com.hao.rpc.enums.RpcError;
 import com.hao.rpc.exception.RpcException;
-import com.hao.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -40,13 +39,11 @@ public class ChannelProvider {
                 .option(ChannelOption.TCP_NODELAY, true);
     }
 
-    public static Channel get(InetSocketAddress inetSocketAddress, CommonSerializer serializer) {
+    public static Channel get(InetSocketAddress inetSocketAddress) {
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) {
-                /*自定义序列化编解码器*/
-                // RpcResponse -> ByteBuf
-                ch.pipeline().addLast(new CommonEncoder(serializer))
+                ch.pipeline().addLast(new CommonEncoder())
                         .addLast(new CommonDecoder())
                         .addLast(new NioClientHandler());
             }

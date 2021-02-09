@@ -29,6 +29,7 @@ public enum RpcError {
 
     // ============= 协议 ================
     UNKNOWN_PROTOCOL("unknown protocol"),
+    UNKNOWN_VERSION("unknown version"),
 
     // ========传输数据类型，比如request, response...=========
     UNKNOWN_PACKAGE_TYPE("unknown package type"),
